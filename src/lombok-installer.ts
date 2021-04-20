@@ -24,10 +24,11 @@ function getWorkspaceConfig(): WorkspaceConfiguration {
 }
 
 export const getJarPath = () => path.join(getExtensionInstance().extensionPath, "server", "lombok.jar");
-
+exports.getEnvJarPath = () => process.env.LOMBOK_JAR_LOCATION;
 export async function install(): Promise<void> {
 
-    const javaAgentArg = `-javaagent:"${getJarPath()}"`;
+    // const javaAgentArg = `-javaagent:"${getJarPath()}"`;
+    const javaAgentArg = exports.getEnvJarPath() ? `-javaagent:"${exports.getEnvJarPath()}"` :`-javaagent:"${exports.getJarPath()}"`;
 
     const vmArgs: string | undefined = getWorkspaceConfig().get(VM_ARGS_KEY);
     if (!vmArgs) {
